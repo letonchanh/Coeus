@@ -33,8 +33,8 @@ let rec expr_structural_same (e0 : Expr.t) (e1 : Expr.t) =
 
 and exprs_structural_same es0 es1 =
   match List.zip es0 es1 with
-  | None -> false
-  | Some eps -> List.for_all eps ~f:(fun (e0, e1) -> expr_structural_same e0 e1)
+  | Unequal_lengths -> false
+  | Ok eps -> List.for_all eps ~f:(fun (e0, e1) -> expr_structural_same e0 e1)
 
 let lval_structural_same (l0 : Lvalue.t) (l1 : Lvalue.t) =
   [%compare.equal: VarBinding.t] l0.base l1.base

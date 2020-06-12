@@ -89,8 +89,8 @@ let rec run_expr decl_env env ty e =
     | None -> e
     | Some (decl: FunDecl.t) ->
       match List.zip decl.param_tys args with
-      | None -> e
-      | Some ty_exprs ->
+      | Unequal_lengths -> e
+      | Ok ty_exprs ->
           let args =
             List.map ty_exprs ~f:(fun (ty, expr) ->
                 run_expr decl_env env ty expr )
@@ -243,8 +243,8 @@ let rec run_stmt decl_env proc_env env stmt =
     | None -> stmt
     | Some proc_sig ->
       match List.zip args proc_sig.ProcSignature.param_tys with
-      | None -> stmt
-      | Some pairs ->
+      | Unequal_lengths -> stmt
+      | Ok pairs ->
           let args =
             List.map pairs ~f:(fun (arg, ty) -> run_expr decl_env env ty arg)
           in

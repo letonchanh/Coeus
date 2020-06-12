@@ -264,7 +264,7 @@ module Expr = struct
         let indices = List.map indices ~f:simplify in
         match base with
         | ArrayStoreExpr {indices= store_indices; value; _}
-          when List.equal indices store_indices ~equal ->
+          when List.equal equal indices store_indices ->
             value
         | _ -> ArraySelectExpr {base; indices} )
     | ArrayStoreExpr {base; indices; value} -> (
@@ -274,7 +274,7 @@ module Expr = struct
         match value with
         | ArraySelectExpr {base= select_base; indices= select_indices}
           when equal base select_base
-               && List.equal indices select_indices ~equal ->
+               && List.equal equal indices select_indices ->
             base
         | _ -> ArrayStoreExpr {base; indices; value} )
     | AnnotatedExpr {annot; expr} -> AnnotatedExpr {annot; expr= simplify expr}

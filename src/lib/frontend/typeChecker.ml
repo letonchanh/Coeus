@@ -33,7 +33,7 @@ let check_etype ?ctx ~expect e =
 let check_arg_types param_tys arg_tys ~ctx =
   let open Result in
   match List.zip param_tys arg_tys with
-  | None ->
+  | Unequal_lengths ->
       let msg =
         Fmt.strf
           "Type error: mismatched number of formal and actual parameters. \
@@ -41,7 +41,7 @@ let check_arg_types param_tys arg_tys ~ctx =
           (List.length param_tys) (List.length arg_tys) Context.pp ctx
       in
       Error msg
-  | Some plist ->
+  | Ok plist ->
       all
         (List.map plist ~f:(fun (pty, aty) -> check_type ~ctx ~expect:pty aty))
       >>= fun _ -> Ok ()

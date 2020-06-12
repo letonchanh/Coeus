@@ -82,7 +82,7 @@ let validate_assign env lhs rhs =
 
 let validate_args env (pred_sig: PredSignature.t) args =
   match List.zip (PredSignature.param_types_of pred_sig) args with
-  | None ->
+  | Unequal_lengths ->
       let msg =
         Fmt.strf
           "Inconsistent number of arguments for predicate \"%a\": expected %d \
@@ -92,7 +92,7 @@ let validate_args env (pred_sig: PredSignature.t) args =
           (List.length args)
       in
       raise (ValidationError msg)
-  | Some pairs ->
+  | Ok pairs ->
       List.fold pairs ~init:env ~f:(fun acc (ty, e) -> validate_expr acc ty e)
 
 let validate_pred env name args =

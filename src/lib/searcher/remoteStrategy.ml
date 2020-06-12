@@ -43,7 +43,7 @@ let get_distribution in_chan out_chan search_config prover_state =
       >>= fun resp ->
       match resp with Response.Probability probs ->
         match List.zip next_rule_index_states (Array.to_list probs) with
-        | None ->
+        | Unequal_lengths ->
             let msg =
               Fmt.strf
                 "Probability count mismatch: there are %d available actions \
@@ -52,7 +52,7 @@ let get_distribution in_chan out_chan search_config prover_state =
                 (Array.length probs)
             in
             Result.Error msg
-        | Some l ->
+        | Ok l ->
             let res =
               List.map l ~f:(fun ((i, s), p) ->
                   let r = Rules.candidate_rules.(i) in

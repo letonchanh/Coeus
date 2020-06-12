@@ -104,21 +104,21 @@ let inline_proc prog caller callees =
           in
           (* For parameters, we apply substitutions directly *)
           match List.zip callee_param_bindings args with
-          | None ->
+          | Unequal_lengths ->
               raise
                 (TransformError
                    "ProcInliner found mismatched actual and formal params")
-          | Some pairs ->
+          | Ok pairs ->
               let param_assigns =
                 List.map pairs ~f:(fun (vb, arg) ->
                     Assign {lhs= Lvalue.of_var vb.name; rhs= arg} )
               in
               match List.zip callee_ret_bindings rets with
-              | None ->
+              | Unequal_lengths ->
                   raise
                     (TransformError
                        "ProcInliner found mismatched actual and formal rets")
-              | Some pairs ->
+              | Ok pairs ->
                   let ret_assigns =
                     List.map pairs ~f:(fun (vb, ret) ->
                         Assign {lhs= ret; rhs= Expr.VarExpr vb.name} )

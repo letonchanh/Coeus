@@ -6,8 +6,8 @@ type t =
   ; blocked_conflicts: int }
 [@@deriving sexp, compare]
 
-val json_of : t -> Yojson.Safe.json
+val json_of : t -> Yojson.Safe.t
 
-val of_json : Yojson.Safe.json -> (t, string) Core.Result.t
+val of_json : Yojson.Safe.t -> (t, string) Core.Result.t
 
 val pp : t Fmt.t

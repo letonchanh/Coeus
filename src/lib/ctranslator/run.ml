@@ -556,7 +556,7 @@ let get_eq_spec (p0: Procedure.t) (p1: Procedure.t) =
   let params1 = p1.params in
   let rets1 = p1.rets in
   match (List.zip params0 params1, List.zip rets0 rets1) with
-  | Some params, Some rets ->
+  | Ok params, Ok rets ->
       let create_eq_expr (bd0, bd1) =
         let name0 = bd0.VarBinding.name in
         let name1 = bd1.VarBinding.name in

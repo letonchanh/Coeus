@@ -73,7 +73,7 @@ let make_output out =
 class read_line ~term ~history ~state = object(self)
 
   inherit LTerm_read_line.read_line ~history ()
-  inherit [Zed_utf8.t] LTerm_read_line.term term
+  inherit [Zed_string.t] LTerm_read_line.term term
 
   method! show_box = false
 
@@ -95,7 +95,7 @@ let rec loop term history (curr_state: ReplState.t) =
     (function Sys.Break -> return None | exn -> Lwt.fail exn)
   >>= function
     | Some command ->
-        let state, out = ReplEvaluator.eval curr_state command in
+        let state, out = ReplEvaluator.eval curr_state (Zed_string.to_utf8 command) in
         LTerm.fprintls term (make_output out)
         >>= fun () ->
         LTerm_history.add history command ;
